@@ -1,28 +1,15 @@
-
 const readline = require('readline-sync')
+const robots = {
+    userInput: require('./robots/user-input.js'),
+    text: require('./robots/robo-text.js')
+}
+
 function start(){
     const content = {}
-    content.termSearch = whatIsSearchTerm()
-    content.prefix = whatIsThePrefix()
 
-    function whatIsSearchTerm(){
-        readline.setEncoding
-        return readline.question("Qual o termo da busca: ")
-    }
+    robots.userInput(content)
+    robots.text(content)
 
-
-    function whatIsThePrefix(){
-        const prefixes =
-        [
-            'Quem foi',
-            'O que foi',
-            'A Historia de'
-        ]
-
-        const selPrefixIndex = readline.keyInSelect(prefixes, 'Escolha um prefixo:')
-        const selPrefixText = prefixes[selPrefixIndex]
-        return selPrefixText
-    }
     console.log(content)
 }
 
