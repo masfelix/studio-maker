@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/masfelix/studio-maker/issues"
   },
-  "homepage": "https://github.com/masfelix/studio-maker#readme"
+  "homepage": "https://github.com/masfelix/studio-maker#readme",
+  "dependencies": {
+    "algorithmia": "^0.3.10",
+    "asyncawait": "^1.0.8",
+    "readline-sync": "^1.4.9",
+    "sbd": "^1.0.15"
+  }
 }
