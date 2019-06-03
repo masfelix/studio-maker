@@ -1,5 +1,4 @@
 const readline = require('readline-sync')
-
 const state = require('./state.js')
 
 function userInput(){

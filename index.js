@@ -10,8 +10,7 @@ async function start(){
     robots.userInput()
     await robots.text()
 
-    const content = robots.state.load()
-    
+    const content = robots.state.load()    
     console.dir(content, {depth: null})
 }
 

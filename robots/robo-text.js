@@ -13,28 +13,6 @@ const nlu = new NaturalLanguageUnderstandingV1({
 });
 const state = require('./state.js')
 
-async function fetchWatsonAndReturnKeywords(sentence){
-  return new Promise((resolve, reject) => {
-
-    nlu.analyze({
-     
-      text: sentence,
-      features:{
-        keywords: {}
-      }
-    }, (error, response)=>{
-      if(error){
-        throw error
-      } 
-      const keywords = response.keywords.map((keyword => {
-        return keyword.text
-      }))
-      resolve(keywords)
-    })
-  })
-}
-
-
 async function robot()
 {
     const content = state.load()
@@ -114,4 +92,25 @@ async function robot()
       }
    
 }
+async function fetchWatsonAndReturnKeywords(sentence){
+  return new Promise((resolve, reject) => {
+
+    nlu.analyze({
+     
+      text: sentence,
+      features:{
+        keywords: {}
+      }
+    }, (error, response)=>{
+      if(error){
+        throw error
+      } 
+      const keywords = response.keywords.map((keyword => {
+        return keyword.text
+      }))
+      resolve(keywords)
+    })
+  })
+}
+
 module.exports = robot
