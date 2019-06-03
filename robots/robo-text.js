@@ -2,11 +2,46 @@ const algorithmia = require('algorithmia')
 const algorithmiaKey = require('../credentials/algorithmia.json').apiKey
 const sentenceBoundayDetection = require('sbd')
 
+const watsonApiKey = require('../credentials/watson-nlu.json').apikey
+
+const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+
+const nlu = new NaturalLanguageUnderstandingV1({
+  version: '2018-11-16',
+  iam_apikey: watsonApiKey,
+  url: 'https://gateway.watsonplatform.net/natural-language-understanding/api'
+});
+
+
+async function fetchWatsonAndReturnKeywords(sentence){
+  return new Promise((resolve, reject) => {
+
+    nlu.analyze({
+     
+      text: sentence,
+      features:{
+        keywords: {}
+      }
+    }, (error, response)=>{
+      if(error){
+        throw error
+      } 
+      const keywords = response.keywords.map((keyword => {
+        return keyword.text
+      }))
+      resolve(keywords)
+    })
+  })
+}
+
+
 async function robot(content)
 {
     await findContentFromSource(content)
     sanitizeContent(content)
     brokenContentInSentences(content)
+    limitMaxNumSentences(content)
+    await fetchKeywordsofAllSenteces(content)
 
     async function findContentFromSource(content){
 
@@ -21,7 +56,6 @@ async function robot(content)
             const wikipediaAlgo = algorithmiaAuthenticated.algo("web/WikipediaParser/0.1.2?timeout=300")
             const wikipediaResp = await wikipediaAlgo.pipe(input)
         
-            console.log(wikipediaResp.get())
             content.sourceContentOriginal = wikipediaResp.get().content
         }
         catch (err){
@@ -66,7 +100,14 @@ async function robot(content)
               })
           })
       }
-
+      function limitMaxNumSentences(content){
+        content.sentences = content.sentences.slice(0, content.maxNumSentences)
+      }
+      async function fetchKeywordsofAllSenteces(content){
+        for (const sentence of content.sentences){
+          sentence.keywords = await fetchWatsonAndReturnKeywords(sentence.text)
+        }
+      }
    
 }
 module.exports = robot
