@@ -1,8 +1,14 @@
 const readline = require('readline-sync')
-function userInput(content){
+const state = require('./state.js')
+
+function userInput(){
+    const content = {
+        maxNumSentences: 5
+    }
 
     content.termSearch = whatIsSearchTerm()
     content.prefix = whatIsThePrefix()
+    state.save(content)
 
     function whatIsSearchTerm(){
         return readline.question("Qual o termo da busca: ")

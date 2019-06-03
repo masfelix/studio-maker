@@ -11,37 +11,19 @@ const nlu = new NaturalLanguageUnderstandingV1({
   iam_apikey: watsonApiKey,
   url: 'https://gateway.watsonplatform.net/natural-language-understanding/api'
 });
+const state = require('./state.js')
 
-
-async function fetchWatsonAndReturnKeywords(sentence){
-  return new Promise((resolve, reject) => {
-
-    nlu.analyze({
-     
-      text: sentence,
-      features:{
-        keywords: {}
-      }
-    }, (error, response)=>{
-      if(error){
-        throw error
-      } 
-      const keywords = response.keywords.map((keyword => {
-        return keyword.text
-      }))
-      resolve(keywords)
-    })
-  })
-}
-
-
-async function robot(content)
+async function robot()
 {
+    const content = state.load()
+
     await findContentFromSource(content)
     sanitizeContent(content)
     brokenContentInSentences(content)
     limitMaxNumSentences(content)
     await fetchKeywordsofAllSenteces(content)
+
+    state.save(content)
 
     async function findContentFromSource(content){
 
@@ -110,4 +92,25 @@ async function robot(content)
       }
    
 }
+async function fetchWatsonAndReturnKeywords(sentence){
+  return new Promise((resolve, reject) => {
+
+    nlu.analyze({
+     
+      text: sentence,
+      features:{
+        keywords: {}
+      }
+    }, (error, response)=>{
+      if(error){
+        throw error
+      } 
+      const keywords = response.keywords.map((keyword => {
+        return keyword.text
+      }))
+      resolve(keywords)
+    })
+  })
+}
+
 module.exports = robot
