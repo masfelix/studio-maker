@@ -1,18 +1,18 @@
 
 const robots = {
     userInput: require('./robots/user-input.js'),
-    text: require('./robots/robo-text.js')
+    text: require('./robots/robo-text.js'),
+    state: require('./robots/state.js')
 }
 
 async function start(){
-    const content = {
-        maxNumSentences: 5
-    }
 
-    robots.userInput(content)
-    await robots.text(content)
+    robots.userInput()
+    await robots.text()
 
-    console.log(JSON.stringify(content, null, 4))
+    const content = robots.state.load()
+    
+    console.dir(content, {depth: null})
 }
 
 start()

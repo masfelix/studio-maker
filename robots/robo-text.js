@@ -11,7 +11,7 @@ const nlu = new NaturalLanguageUnderstandingV1({
   iam_apikey: watsonApiKey,
   url: 'https://gateway.watsonplatform.net/natural-language-understanding/api'
 });
-
+const state = require('./state.js')
 
 async function fetchWatsonAndReturnKeywords(sentence){
   return new Promise((resolve, reject) => {
@@ -35,13 +35,17 @@ async function fetchWatsonAndReturnKeywords(sentence){
 }
 
 
-async function robot(content)
+async function robot()
 {
+    const content = state.load()
+
     await findContentFromSource(content)
     sanitizeContent(content)
     brokenContentInSentences(content)
     limitMaxNumSentences(content)
     await fetchKeywordsofAllSenteces(content)
+
+    state.save(content)
 
     async function findContentFromSource(content){
 
