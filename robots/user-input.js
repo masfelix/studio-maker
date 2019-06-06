@@ -11,17 +11,17 @@ function userInput(){
     state.save(content)
 
     function whatIsSearchTerm(){
-        return readline.question("Qual o termo da busca: ")
+        return readline.question("Term of Search: ")
     }
     function whatIsThePrefix(){
         const prefixes =
         [
-            'Quem foi',
-            'O que foi',
-            'A Historia de'
+            'Who is',
+            'What is',
+            'The History of'
         ]
 
-        const selPrefixIndex = readline.keyInSelect(prefixes, 'Escolha um prefixo:')
+        const selPrefixIndex = readline.keyInSelect(prefixes, 'Choose:')
         const selPrefixText = prefixes[selPrefixIndex]
         return selPrefixText
     }

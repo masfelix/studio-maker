@@ -30,7 +30,7 @@ async function robot()
         try{
             var input = {
                 "articleName": content.termSearch,
-                "lang": "pt"
+                "lang": "en"
             };
 
             const algorithmiaAuthenticated = algorithmia.client(algorithmiaKey)
